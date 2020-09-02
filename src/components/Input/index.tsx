@@ -1,4 +1,10 @@
-import React, { InputHTMLAttributes, useEffect, useRef } from 'react';
+import React, {
+  InputHTMLAttributes,
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+} from 'react';
 import { IconBaseProps } from 'react-icons';
 import { useField } from '@unform/core';
 import { Container } from './styles';
@@ -10,8 +16,39 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
-  const inputRef = useRef(null);
+  // tipando o useRef para verificar se os elementos do input estão vazios
+  const inputRef = useRef<HTMLInputElement>(null);
   const { defaultValue, error, fieldName, registerField } = useField(name);
+  // ver quando o input estiver com focus, quando estiver digitando algo, vai ficar laranja
+  const [isFocused, setIsFocused] = useState(false);
+  // ver se já foi digitado algo no input, quando estiver preenchido, o ícone vai ficar laranja
+  const [isFilled, setIsFilled] = useState(false);
+
+  /*
+  // Quando criar uma função dentro do componente, utilizar o useCallback
+  // ele é bem similar ao useEffect
+  // função para manter o ícone laranja
+*/
+  const handleInputBlur = useCallback(
+    () => {
+      setIsFocused(false);
+
+      // !! transforma em booleano, iguala o if abaixo
+      setIsFilled(!!inputRef.current?.value);
+
+      // if (inputRef.current?.value) {
+      //   setIsFilled(true)
+      // } else {
+      //   setIsFilled(false)
+      // }
+    },
+    // deixar o parâmetro vazio pois só vai recriar quando algo mudar, aqui não queremos que mude
+    [],
+  );
+
+  const handleOnFocus = useCallback(() => {
+    setIsFocused(true);
+  }, []);
 
   useEffect(() => {
     registerField({
@@ -26,9 +63,17 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container>
+    <Container isFilled={isFilled} isFocused={isFocused}>
       {Icon && <Icon size={20} />}
-      <input defaultValue={defaultValue} ref={inputRef} {...rest} />
+      <input
+        // ganhou o foco
+        onFocus={handleOnFocus}
+        // perdeu o foco
+        onBlur={handleInputBlur}
+        defaultValue={defaultValue}
+        ref={inputRef}
+        {...rest}
+      />
     </Container>
   );
 };
