@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-//yarn add @types/styled-components
+// yarn add @types/styled-components
 
 export default createGlobalStyle`
   * {
