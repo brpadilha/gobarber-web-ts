@@ -21,8 +21,9 @@ interface SignInFormData {
 }
 
 const SignIn: React.FC = () => {
-  const { signIn } = useContext(AuthContext);
+  const { user, signIn } = useContext(AuthContext);
 
+  console.log(user);
   // vendo o estado current do form
   const formRef = useRef<FormHandles>(null);
 
