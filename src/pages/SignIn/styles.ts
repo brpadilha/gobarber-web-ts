@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { shade } from 'polished';
 import signInBackgroundImg from '../../assets/sign-in-background.png';
 
@@ -13,13 +13,34 @@ export const Container = styled.div`
 export const Content = styled.div`
   display: flex;
   flex-direction: column;
-  place-content: center;
-  /* faz com que o content fique centralizado na tela */
-
   align-items: center;
+  justify-content: center;
+
   width: 100%;
   max-width: 700px;
+`;
 
+// animação para o container aparecer da esquerda para direita
+const appearFromLeft = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(-50px)
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0)
+  }
+`;
+
+export const AnimationConatiner = styled.div`
+  /* animation */
+  animation: ${appearFromLeft} 1s;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* faz com que o content fique centralizado na tela */
   form {
     margin: 80px;
     width: 340px;
