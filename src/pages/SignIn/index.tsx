@@ -7,6 +7,7 @@ import { FormHandles } from '@unform/core';
 
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/auth';
+import { useToast } from '../../hooks/toast';
 
 import logoImg from '../../assets/logo.svg';
 import Input from '../../components/Input';
@@ -23,6 +24,8 @@ interface SignInFormData {
 const SignIn: React.FC = () => {
   // useAuth é usando o contexto global do usuário logado
   const { user, signIn } = useAuth();
+
+  const { addToast } = useToast();
 
   console.log(user);
   // vendo o estado current do form
@@ -41,6 +44,11 @@ const SignIn: React.FC = () => {
         });
 
         await schema.validate(data, { abortEarly: false });
+
+        await signIn({
+          email: data.email,
+          password: data.password,
+        });
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // pegando as mensagens de error
@@ -50,17 +58,14 @@ const SignIn: React.FC = () => {
           formRef.current?.setErrors(errors);
         }
 
+        await addToast();
+
         // disparar um toast
       }
-
-      signIn({
-        email: data.email,
-        password: data.password,
-      });
     },
 
     // toda variável externa devemos utilizar aqui
-    [signIn],
+    [signIn, addToast],
   );
 
   return (
