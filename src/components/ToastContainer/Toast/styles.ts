@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components';
+// para o elemento react sping funcionar nao pode usar o componente somente como uma div, mas como uma animated div
+import { animated } from 'react-spring';
 
 interface ContainerProps {
   // tipo da mensagem
@@ -25,7 +27,7 @@ const toastTypeVariations = {
   `,
 };
 
-export const Container = styled.div<ContainerProps>`
+export const Container = styled(animated.div)<ContainerProps>`
   width: 360px;
   position: relative;
   padding: 16px 30px 16px 16px;
