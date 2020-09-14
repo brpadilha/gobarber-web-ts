@@ -5,7 +5,7 @@ import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
 
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import * as Yup from 'yup';
 import { useAuth } from '../../hooks/auth';
@@ -25,11 +25,12 @@ interface SignInFormData {
 
 const SignIn: React.FC = () => {
   // useAuth é usando o contexto global do usuário logado
-  const { user, signIn } = useAuth();
+  const { signIn } = useAuth();
 
   const { addToast } = useToast();
 
-  console.log(user);
+  const history = useHistory();
+
   // vendo o estado current do form
   const formRef = useRef<FormHandles>(null);
 
@@ -51,6 +52,8 @@ const SignIn: React.FC = () => {
           email: data.email,
           password: data.password,
         });
+
+        history.push('/dashboard');
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // pegando as mensagens de error
@@ -73,7 +76,7 @@ const SignIn: React.FC = () => {
     },
 
     // toda variável externa devemos utilizar aqui
-    [signIn, addToast],
+    [signIn, addToast, history],
   );
 
   return (
