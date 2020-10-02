@@ -7,7 +7,7 @@ interface ContainerProps {
   type?: 'success' | 'error' | 'info';
 
   // verifica se a toast tem mensagem ou nao
-  hasDescription: boolean;
+  hasDescription: number;
 }
 
 const toastTypeVariations = {
