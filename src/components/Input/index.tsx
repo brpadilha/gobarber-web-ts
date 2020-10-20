@@ -17,9 +17,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
   // quando quer importar um tipo componente
   icon?: React.ComponentType<IconBaseProps>;
+  containerStyle?: object;
 }
 
-const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
+const Input: React.FC<InputProps> = ({
+  name,
+  containerStyle = {},
+  icon: Icon,
+  ...rest
+}) => {
   // tipando o useRef para verificar se os elementos do input estão vazios
   const inputRef = useRef<HTMLInputElement>(null);
   const { defaultValue, error, fieldName, registerField } = useField(name);
@@ -67,10 +73,16 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField]);
 
   return (
-    <Container isError={!!error} isFilled={isFilled} isFocused={isFocused}>
+    <Container
+      isError={!!error}
+      isFilled={isFilled}
+      isFocused={isFocused}
+      style={containerStyle}
+    >
       {Icon && <Icon size={20} />}
       <input
         // ganhou o foco
+        name={name}
         onFocus={handleOnFocus}
         // perdeu o foco
         onBlur={handleInputBlur}
